@@ -129,13 +129,22 @@ plt.gca().yaxis.set_major_formatter(mtick.PercentFormatter(1.0))
 plt.savefig("chatgpt_watson_v0.8_precision_recall.svg", format="svg", bbox_inches="tight", pad_inches=0, transparent=False)
 plt.show()
 
+#%% Compute a baseline accuracy:
+# We check whether the true_answer is literally contained in ChatGPT's answer
+# If so, we count it as "obviously" correct
+# This is a very naive baseline, but it's a good sanity check
+# use apply to apply the function to each row
+full_df["baseline_accuracy"] = full_df.apply(
+    lambda row: int(row["true_answer"].lower() in row["model_answer"].lower()), axis=1)
+
+
 #%% Compute accuracy by round
 
 # Get the number of correct answers by round
-correct_by_round = full_df.groupby(["round"]).agg({"accuracy": "sum"})
+correct_by_round = full_df.groupby(["round"]).agg({"accuracy": "sum", "baseline_accuracy": "sum"})
 
 # Get the total number of answers by round
-total_by_round = full_df.groupby(["round"]).agg({"accuracy": "count"})
+total_by_round = full_df.groupby(["round"]).agg({"accuracy": "count", "baseline_accuracy": "count"})
 
 # Compute the accuracy by round
 accuracy_by_round = correct_by_round / total_by_round
@@ -145,5 +154,24 @@ print(accuracy_by_round.to_markdown())
 
 #%%
 
+# Overall accuracy:
+print(f"Overall accuracy: {full_df['accuracy'].mean()}")
+print(f"Overall string contains accuracy: {full_df['baseline_accuracy'].mean()}")
 
+#%% Extract the baseline_accuracy == 0 and accuracy == 1 answers in a new df
+correct_but_not_obviously_correct = full_df[(full_df["baseline_accuracy"] == 0) & (full_df["accuracy"] == 1)]
 
+# Subselect the question, true_answer, model_answer columns
+correct_but_not_obviously_correct = correct_but_not_obviously_correct[["true_answer", "model_answer", "question"]]
+# Save to csv
+correct_but_not_obviously_correct.to_csv("correct_but_not_obviously_correct.csv", index=True)
+
+#%% Are they baseline_accuracy == 1 and accuracy == 0?
+# Extract the baseline_accuracy == 1 and accuracy == 0 answers in a new df
+obviously_correct_but_incorrect = full_df[(full_df["baseline_accuracy"] == 1) & (full_df["accuracy"] == 0)]
+
+# Subselect the question, true_answer, model_answer columns
+obviously_correct_but_incorrect = obviously_correct_but_incorrect[["true_answer", "model_answer", "question"]]
+
+# Save to CSV as potential false negatives
+obviously_correct_but_incorrect.to_csv("potential_false_negatives.csv", index=True)

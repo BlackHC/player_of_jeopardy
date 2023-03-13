@@ -21,13 +21,20 @@ Without further ado, here are the results.
 ### Precision/Accuracy@100
 ChatGPT's average accuracy is pretty good out of the box:
 
-| Jeopardy! Round  | Accuracy |
-|:-----------------|---------:|
-| Double Jeopardy! |   0.87% |
-| Final Jeopardy!  |   0.86% |
-| Jeopardy!        |   0.88% |
+| Jeopardy! Round  |   Accuracy | String Match Accuracy |
+|:-----------------|-----------:|----------------------:|
+| Double Jeopardy! |   0.872611 |              0.715499 |
+| Final Jeopardy!  |   0.861111 |              0.555556 |
+| Jeopardy!        |   0.877691 |              0.726027 |
 
 It has better than 85% accuracy on all questions (thus also better than 85% precision at 70% answered).
+
+#### Evaluation Baseline: String Match Accuracy
+The string match accuracy simply checks for the correct answer being fully contained in ChatGPT's answer. This is a very simple evaluation baseline. Overall string match accuracy is 72%.
+
+[potential_false_negatives.csv](potential_false_negatives.csv) contains the samples which have a string match but were not accepted by ChatGPT in its self-evaluation. They are potential false negative. Indeed, they mostly seem to be correct answers from looking across them (that's 1.3% of all samples).
+
+[correct_but_not_obviously_correct.csv](correct_but_not_obviously_correct.csv) contains the samples which don't have a string match but were accepted by ChatGPT in its self-evaluation. They are correct but not obviously correct. Having looked through them by hand, they seem to be correctly answered. That's 17% of all samples.
 
 ### Precision-Recall Curve
 
