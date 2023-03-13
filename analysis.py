@@ -54,6 +54,8 @@ full_df["confidence"].fillna(1, inplace=True)
 
 # Plot the distribution of confidence
 sns.histplot(data=full_df, x="confidence", bins=20)
+# Save as svg
+plt.savefig("confidence_distribution.svg", format="svg", bbox_inches="tight", pad_inches=0, transparent=False)
 plt.show()
 
 #%%
