@@ -20,11 +20,12 @@ Without further ado, here are the results.
 
 ### Precision/Accuracy@100
 ChatGPT's average accuracy is pretty good out of the box:
-| round            |   accuracy |
-|:-----------------|-----------:|
-| Double Jeopardy! |   0.872611 |
-| Final Jeopardy!  |   0.861111 |
-| Jeopardy!        |   0.877691 |
+
+| Jeopardy! Round  | Accuracy |
+|:-----------------|---------:|
+| Double Jeopardy! |   0.87% |
+| Final Jeopardy!  |   0.86% |
+| Jeopardy!        |   0.88% |
 
 It has better than 85% accuracy on all questions (thus also better than 85% precision at 70% answered).
 
