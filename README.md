@@ -30,21 +30,33 @@ and it is somewhat calibrated--albeit a bit overconfident at times. It performs 
 ![From the paper](watson_cmp/watson_paper.png)
 
 
-[^1]: Ferrucci, D.A., 2012. Introduction to “This is Watson”. IBM Journal of Research and Development, 56(3.4), pp.1-1.
+[^1]: [Ferrucci, D.A., 2012. Introduction to “This is Watson”. IBM Journal of Research and Development, 56(3.4), pp.1-1.}(https://ieeexplore.ieee.org/document/6177724)
 
+# Details
 
+The evaluation is straightforward:
+OpenAI's ChatGPT API via [langchain](https://github.com/hwchase17/langchain).
 
----
+The following sequence diagrams shows how the evaluation works for a single sample. Note that confidence and accuracy are retrieved in forkd chains.
 
-```bibtex
-@article{ferrucci2012introduction,
-  title={Introduction to “this is watson”},
-  author={Ferrucci, David A},
-  journal={IBM Journal of Research and Development},
-  volume={56},
-  number={3.4},
-  pages={1--1},
-  year={2012},
-  publisher={IBM}
-}
+```mermaid
+sequenceDiagram
+    participant System
+    participant AI
+    participant Human
+
+    System ->> AI: You are playing Jeopardy.<br/>You are the contestant.<br/>You are answering questions.
+    Human -->> AI: Do you know Jeopardy?
+    AI -->> Human: Yes, Jeopardy! is a popular TV game show that has been on the air since 1964.<br/>Contestants are presented with answers to trivia questions in various categories,<br/>and they must respond with a question that corresponds to the answer.<br/>The show is known for its unique format where the answers are presented first,<br/>and the contestants must phrase their responses in the form of a question.<br/>The show has become a cultural phenomenon and has been adapted in many countries.
+    Human ->> AI: Let's play.<br/><br/>Category: {category}<br/>{question}<br/>
+    AI -->> System: {answer}
+    par 
+    Human ->> AI: Please give a confidence between 0 and 1<br/>about how certain you are this is the correct answer.
+    AI -->> System: {confidence}
+    and
+    Human -->> AI: Let's verify. The solution book says, it's {true_answer}. Does this match your solution above?<br/>Only answer yes or no. Example: 'Yes.' or 'No.'
+    AI -->> System: {accuracy}
+    end
 ```
+
+
