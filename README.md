@@ -1,10 +1,12 @@
 # Player of Jeopardy!
 
-Do you remember IBM Watson winning at Jeopardy? That was in 2011. How well does `vanilla' ChatGPT do on Jeopardy? It seems to be doing better than Watson---on a random sample of 2000 questions from 216930 at least!
+Do you remember IBM Watson winning at Jeopardy? That was in 2011. How well does `vanilla' ChatGPT do on Jeopardy clues now? It seems to be doing better than Watson---on a random sample of 2000 questions from 216930 at least!
 
-See [this notebook](evaluation.py) for the evaluation code.
+Note that this codebase is not evaluating the strategy component of the original Watson. It is only the question answering component.
 
-The paper 'Introduction to “This is Watson”' [^1] states that the original goal for Watson was:
+See [this file](evaluation.py) for the evaluation code.
+
+The paper 'Introduction to “This is Watson”' [^1] states that the original goal for IBM Watson was:
 
 > [...] a performance
 target that would enable Watson to buzz in for at least 70%
@@ -14,8 +16,9 @@ at 70% answered, or simply 85% Precision@70
 
 Without further ado, here are the results:
 ![](chatgpt_watson_v0.8_precision_recall.svg)
+Watson v0.8 is the version that was used to compete.
 
-ChatGPT is doing better than Watson on the 2000 questions that were randomly sampled. 
+ChatGPT is doing better than Watson on the 2000 questions that were randomly sampled when it comes to finding the correct question for the clue (using self-evaluation).
 
 Its average accuracy is also pretty good out of the box:
 | round            |   accuracy |
@@ -23,12 +26,10 @@ Its average accuracy is also pretty good out of the box:
 | Double Jeopardy! |   0.872611 |
 | Final Jeopardy!  |   0.861111 |
 | Jeopardy!        |   0.877691 |
-and it is somewhat calibrated--albeit a bit overconfident at times. It performs better than it thinks it does when it is not confident about its answer, however.
 
+ChatGPT is also quite calibrated:
 ![](chatgpt_calibration.svg)
-
-![From the paper](watson_cmp/watson_paper.png)
-
+It is a bit overconfident as visible in the shift. On the other hand, it also performs better than it thinks it does when it is not confident about its answer.
 
 [^1]: [Ferrucci, D.A., 2012. Introduction to “This is Watson”. IBM Journal of Research and Development, 56(3.4), pp.1-1.}(https://ieeexplore.ieee.org/document/6177724)
 
@@ -58,5 +59,7 @@ sequenceDiagram
     AI -->> System: {accuracy}
     end
 ```
+
+The self-evaluation results have been spot-checked against the solution book. It seems that the self-evaluation at most errs on the side of not accepting valid answers (e.g. Indiana vs Indiana University, when the question was about the university).
 
 
