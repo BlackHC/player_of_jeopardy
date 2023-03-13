@@ -32,25 +32,27 @@ It has better than 85% accuracy on all questions (thus also better than 85% prec
 ### Precision-Recall Curve
 
 The precision-recall curve looks like this. Watson v0.8 is the version that was used to compete in 2011 for comparison[^1]. 
+
 ![](chatgpt_watson_v0.8_precision_recall.svg)
 
 ChatGPT is doing better than Watson on the 2000 questions that were randomly sampled when it comes to finding the correct question for the clue (using self-evaluation) when looking at average precision (AP) and the "long tail".
 
 ### Calibration Curve
 
-ChatGPT is also quite calibrated:
+ChatGPT is also well-calibrated:
+
 ![](chatgpt_calibration.svg)
 
 It is a bit overconfident. On the other hand, it also performs better than it predicts when it is not confident about its answers.
 
-[^1]: [Ferrucci, D.A., 2012. Introduction to “This is Watson”. IBM Journal of Research and Development, 56(3.4), pp.1-1.}(https://ieeexplore.ieee.org/document/6177724)
+[^1]: [Ferrucci, D.A., 2012. Introduction to “This is Watson”. IBM Journal of Research and Development, 56(3.4), pp.1-1.](https://ieeexplore.ieee.org/document/6177724)
 
 ## Details
 
 The evaluation is straightforward:
 OpenAI's ChatGPT API via [langchain](https://github.com/hwchase17/langchain) on the [Jeopardy dataset](https://huggingface.co/datasets/jeopardy) available on HuggingFace.
 
-The following sequence diagrams shows how the evaluation works for a single sample. Note that confidence and accuracy are retrieved in forkd chains.
+The following sequence diagrams shows how the evaluation works for a single sample. Note that confidence and accuracy are retrieved in forked chains (so are independent of each other).
 
 ```mermaid
 sequenceDiagram
