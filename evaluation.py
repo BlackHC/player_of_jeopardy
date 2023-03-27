@@ -105,6 +105,10 @@ def evaluate_jeopardy_row(chat_model: ChatOpenAI, idx: object, question: str, ca
         print(f"Expected confidence between 0 and 1, got {confidence}")
         confidence = float("nan")
 
+    if confidence != float("nan") and confidence < 0 or confidence > 1:
+        print(f"Expected confidence between 0 and 1, got {confidence}")
+        confidence = float("nan")
+
     # Verify the answer.
     accuracy_chain = list(chat_chain)
 
@@ -163,6 +167,7 @@ class CachedChatOpenAI(ChatOpenAI):
                     llm_output=result.generation_info,
                 )
                 return chat_result
+            raise ValueError("No results found in cache.")
         chat_result = super()._generate(messages, stop)
         if langchain.llm_cache:
             assert len(chat_result.generations) == 1
@@ -178,7 +183,7 @@ chat_model = CachedChatOpenAI(max_tokens=512, )
 np.random.seed(42)
 
 # Randomly sample 100 indices from the dataset.
-n = 2000
+n = 20000
 indices = np.random.choice(len(dataset), n, replace=False)
 
 # %%

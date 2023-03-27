@@ -45,10 +45,13 @@ del full_df["question_dataset"]
 # We have one nan
 # The log message is: Expected confidence between 0 and 1, got content='I apologize, but I cannot provide a specific numerical value of my confidence level, as I am an artificial intelligence language model, and I do not have personal feelings or emotions. However, based on my knowledge and analysis of the available information, I am confident that my answer (South Africa) is correct.' additional_kwargs={}
 # Check that that is the case
-assert len(full_df[full_df["confidence"].isna()]) == 1
-assert full_df[full_df["confidence"].isna()].iloc[0]["answer"] == "South Africa"
+#assert len(full_df[full_df["confidence"].isna()]) == 1
+#assert full_df[full_df["confidence"].isna()].iloc[0]["answer"] == "South Africa"
 # Set the confidence to 1.
-full_df["confidence"].fillna(1, inplace=True)
+#full_df["confidence"].fillna(1, inplace=True)
+
+# Drop rows with na in confidence
+full_df.dropna(subset=["confidence"], inplace=True)
 
 #%%
 
